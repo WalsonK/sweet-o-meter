@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 
 import '@capacitor-community/camera-preview'
+import { EventsService } from '../shared/events.service';
 
 
 @Component({
@@ -9,11 +10,20 @@ import '@capacitor-community/camera-preview'
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page {
+export class Tab2Page implements OnInit, OnDestroy{
+  tab2btnClickSub : any;
   image = null;
   cameraActive = false;
 
-  constructor() {}
+  constructor(private eventsService: EventsService) {}
+
+  ngOnInit(): void {
+    this.tab2btnClickSub = this.eventsService.onTab2ButtonClick().subscribe(() => {
+      if(this.cameraActive){
+        this.captureImage();
+      }
+    })
+  }
 
   openCamera(){
     const cameraPreviewOptions: CameraPreviewOptions = {
@@ -43,5 +53,9 @@ export class Tab2Page {
 
   flipCamera(){
     CameraPreview.flip();
+  }
+
+  ngOnDestroy(): void {
+    this.tab2btnClickSub.unsubsribe();
   }
 }
