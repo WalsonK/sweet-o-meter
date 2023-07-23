@@ -1,0 +1,8 @@
+{
+  "name": "Sweet-o-Meter",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "287783eb"
+}
