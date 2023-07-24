@@ -1,14 +1,10 @@
 <app-header></app-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <div id="cameraPreview" class="cameraPreview">
 
     <ion-button (click)="stopCamera()" expand="block" id="close" class="overlay" *ngIf="cameraActive">
       <ion-icon name="close-circle"></ion-icon>
-    </ion-button>
-
-    <ion-button (click)="captureImage()" expand="block" id="capture" class="overlay" *ngIf="cameraActive">
-      <ion-icon name="camera" ></ion-icon>
     </ion-button>
 
     <ion-button (click)="flipCamera()" expand="block" id="flip" class="overlay" *ngIf="cameraActive">
@@ -16,5 +12,6 @@
     </ion-button>
 
   </div>
-  <ion-button (click)="openCamera()" expand="full" *ngIf="!cameraActive">Ouvrir la caméra</ion-button>
+  <ion-button (click)="openCamera()" expand="full" *ngIf="!cameraActive" style="margin-bottom:2%">Ouvrir la caméra</ion-button>
+  <ion-button (click)="uploadPicture()" expand="full" *ngIf="!cameraActive">Importer une photo</ion-button>
 </ion-content>

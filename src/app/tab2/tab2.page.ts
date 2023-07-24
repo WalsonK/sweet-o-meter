@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
+import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions, CameraSampleOptions } from '@capacitor-community/camera-preview';
 
 import '@capacitor-community/camera-preview'
-import { EventsService } from '../shared/events.service';
-
+import { EventsService } from '../shared/events.service'
+import { Camera, ImageOptions, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-tab2',
@@ -53,6 +53,21 @@ export class Tab2Page implements OnInit, OnDestroy{
 
   flipCamera(){
     CameraPreview.flip();
+  }
+
+  async uploadPicture(){
+    const imageOptions : ImageOptions = {
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos
+    }
+    try {
+      const img = await Camera.getPhoto(imageOptions);
+      const base64Image = img.base64String;
+      console.log(base64Image)
+    }
+    catch(e){
+      console.log('Erreur :', e);
+    }
   }
 
   ngOnDestroy(): void {
