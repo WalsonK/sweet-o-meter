@@ -18,6 +18,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   constructor(private eventsService: EventsService) {}
 
   ngOnInit(): void {
+    this.openCamera();
     this.tab2btnClickSub = this.eventsService.onTab2ButtonClick().subscribe(() => {
       if(this.cameraActive){
         this.captureImage();
@@ -64,6 +65,7 @@ export class Tab2Page implements OnInit, OnDestroy{
       const img = await Camera.getPhoto(imageOptions);
       const base64Image = img.base64String;
       console.log(base64Image)
+      if(this.cameraActive) this.stopCamera();
     }
     catch(e){
       console.log('Erreur :', e);

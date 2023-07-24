@@ -7,6 +7,10 @@
       <ion-icon name="close-circle"></ion-icon>
     </ion-button>
 
+    <ion-button (click)="uploadPicture()" expand="block" id="capture" class="overlay" *ngIf="cameraActive">
+      <ion-icon name="download-outline"></ion-icon>
+    </ion-button>
+
     <ion-button (click)="flipCamera()" expand="block" id="flip" class="overlay" *ngIf="cameraActive">
       <ion-icon name="camera-reverse"></ion-icon>
     </ion-button>
