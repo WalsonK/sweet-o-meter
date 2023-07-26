@@ -2,7 +2,7 @@ from PIL import Image
 import os
 
 
-def resizer(input_path, output_path, size=(50, 50)):
+def resize_datasets(input_path, output_path, size=(50, 50)):
     try:
         absolut_input_path = os.path.abspath(input_path)
         if not os.path.exists(absolut_input_path):
@@ -23,5 +23,5 @@ def resizer(input_path, output_path, size=(50, 50)):
         print(f"Une erreur est survenue : {e}")
 
 
-resizer("/Users/walson/Documents/Cours/Rattrapage PA/sweetometer/sweet-o-meter/API/Data/Datasets/Originals/Churros"
-        "/Google/image_1.jpg", "../Data/Datasets/50x50/Churros")
+resize_datasets("/Users/walson/Documents/Cours/Rattrapage PA/sweetometer/sweet-o-meter/API/Data/Datasets/Originals/"
+                "Churros/Google/image_1.jpg", "../Data/Datasets/50x50/Churros")

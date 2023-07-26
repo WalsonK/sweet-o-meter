@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # LOCAL USE ONLY
+from Utils.tools import recompose_png_to_jpg, resizer, image_to_matrix
 
 app = FastAPI()
 
@@ -26,6 +27,12 @@ async def root():
 async def predict(request: Request):
     data = await request.json()
     base64 = data['data']
+
+    path = recompose_png_to_jpg(base64)
+    resizer(path)
+    array = image_to_matrix(path)
+    print(array)
+
     return {"message": "predict Churros", "percent": 100, "data": base64}
 
 
