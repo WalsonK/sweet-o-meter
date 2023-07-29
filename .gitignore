@@ -68,3 +68,4 @@ testem.log
 Thumbs.db
 API/__pycache__
 *.pyc
+*.jpg
