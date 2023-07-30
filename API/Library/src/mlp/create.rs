@@ -3,7 +3,7 @@ use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
 
 #[no_mangle]
-extern "C" fn create_pmc(arr: *const i32, len: i32, nb_seed: u8) -> *mut MLP {
+extern "C" fn create_mlp(arr: *const i32, len: i32, nb_seed: u8) -> *mut MLP {
     let mut model = Box::new(MLP {
         layers: 0,
         neurons_per_layer: Vec::new(),
