@@ -12,7 +12,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  sendImage(base64: string): Observable<any>{
-    return this.http.post<any>(this.url + "predict", {data: base64});
+  sendImage(data: any): Observable<any>{
+    return this.http.post<any>(this.url + "predict", data);
   }
 }

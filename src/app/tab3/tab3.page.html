@@ -1,11 +1,64 @@
 <app-header></app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card>
+          <ion-card-header>
+          <ion-card-title>Paramètres avancé</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Peu importe le modèle sélectionné, les paramètres suivants s'appliqueront de manière universelle.
+            <ion-item lines="none">
+              <ion-label>Base de couleur pour le traitement :</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-radio-group [(ngModel)]="color" (ionChange)="resetSize()">
+                <ion-radio value="rgb">En couleur (RGB)</ion-radio><br />
+                <ion-radio value="l">En noir et blanc</ion-radio><br />
+              </ion-radio-group>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Taille pour le traitement de l'image :</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-select placeholder="Taille en pixel" [(ngModel)]="size">
+                <ion-select-option value="50" [disabled]="isDisabled(50)">50x50</ion-select-option>
+                <ion-select-option value="25" [disabled]="isDisabled(25)">25x25</ion-select-option>
+                <ion-select-option value="15">15x15</ion-select-option>
+              </ion-select>
+            </ion-item>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Configuration du système de reconnaissance d'IA</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            L'application utilise soit une bibliothèque RUST pour la génération du Perceptron Multi-Couches (MLP), soit Tensorflow, et les paramètres sont pris en charge par les deux systèmes de reconnaissance d'intelligence artificielle (AI Recognizer).
+          </ion-card-content>
+          <ion-segment [(ngModel)]="ia">
+            <ion-segment-button value="rust">
+              <ion-label>Rust_mlp</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="tensorflow">
+              <ion-label>Tensorflow</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2"></ion-col>
+      <ion-col size="8">
+        <ion-button color="success" expand="block" (click)="save()" [disabled]="size === ''">Sauvegarder</ion-button>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -5,6 +5,7 @@ import '@capacitor-community/camera-preview'
 import { EventsService } from '../shared/events.service'
 import { Camera, ImageOptions, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ApiService } from '../shared/api.service';
+import { ParametreService } from '../shared/parametre.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,7 +17,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   image = null;
   cameraActive = false;
 
-  constructor(private eventsService: EventsService, private apiService: ApiService) {}
+  constructor(private eventsService: EventsService, private apiService: ApiService, private parametreService: ParametreService) {}
 
   ngOnInit(): void {
     this.openCamera();
@@ -48,8 +49,13 @@ export class Tab2Page implements OnInit, OnDestroy{
     };
 
     const result = await CameraPreview.capture(CameraPreviewPictureOptions);
-    const base64Picture = result.value;
-    this.apiService.sendImage(base64Picture).subscribe(result => {
+    const data = {
+      base64 : result.value,
+      ia : this.parametreService.ia,
+      color : this.parametreService.color,
+      size : this.parametreService.size
+    }
+    this.apiService.sendImage(data).subscribe(result => {
       console.log("API : ", result)
     })
     this.stopCamera();

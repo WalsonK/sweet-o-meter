@@ -26,14 +26,17 @@ async def root():
 @app.post("/predict")
 async def predict(request: Request):
     data = await request.json()
-    base64 = data['data']
+    base64 = data['base64']
+    ia = data['ia']
+    color = data['color']
+    size = int(data['size'])
 
     path = recompose_png_to_jpg(base64)
-    resizer(path)
-    array = image_to_matrix(path)
+    resizer(path, size=(size, size))
+    array = image_to_matrix(path, True if color == "l" else False)
     print(array)
 
-    return {"message": "predict Churros", "percent": 100, "data": base64}
+    return {"message": "predict Churros", "percent": 100, "data": "base64"}
 
 
 @app.get("/hello/{name}")

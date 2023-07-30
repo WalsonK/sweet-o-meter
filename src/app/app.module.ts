@@ -9,11 +9,12 @@ import { AppComponent } from './app.component';
 import { EventsService } from './shared/events.service';
 import { ApiService } from './shared/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ParametreService } from './shared/parametre.service';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EventsService, ApiService],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EventsService, ApiService, ParametreService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
