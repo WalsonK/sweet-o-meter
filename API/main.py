@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # LOCAL USE ONLY
 from Utils.tools import recompose_png_to_jpg, resizer, image_to_matrix
+from Python_Library.library import MLP
 
 app = FastAPI()
 
@@ -35,6 +36,13 @@ async def predict(request: Request):
     resizer(path, size=(size, size))
     array = image_to_matrix(path, True if color == "l" else False)
     print(array)
+
+    if ia == "rust":
+        # Load Own model
+        ...
+    else:
+        # Load tensorflow model
+        ...
 
     return {"message": "predict Churros", "percent": 100, "data": "base64"}
 
