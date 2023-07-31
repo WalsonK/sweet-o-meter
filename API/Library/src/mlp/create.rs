@@ -24,26 +24,18 @@ extern "C" fn create_mlp(arr: *const i32, len: i32, nb_seed: u8) -> *mut MLP {
 
     // Weights Initialisation
     let mut rng: StdRng = SeedableRng::from_seed(seed);
-    for layer in 0..=model.layers{
-        let mut layer_weight = Vec::new();
+    for layer in 0..=model.layers {
 
-        if layer == 0 {
-            model.weights.push(layer_weight);
-        } else {
-            for _ in 0..=model.neurons_per_layer[layer - 1]{
-                let mut neuron_weight = Vec::new();
-
-                for j in 0..=model.neurons_per_layer[layer]{
-                    let weight = if j == 0 {
-                        0.0f32
-                    } else {
-                        rng.gen_range(-1.0f32..=1.0f32)
-                    };
-                    neuron_weight.push(weight);
-                }
-                layer_weight.push(neuron_weight);
+        for i in 0..=model.neurons_per_layer[layer- 1] {
+            model.weights[layer].push(Vec::new());
+            for j in 0..=model.neurons_per_layer[layer] {
+                let weight = if j == 0 {
+                    0.0f32
+                } else {
+                    rng.gen_range(-1.0f32..=1.0f32)
+                };
+                model.weights[layer][i].push(weight);
             }
-            model.weights.push(layer_weight);
         }
     }
 
@@ -71,6 +63,43 @@ extern "C" fn create_mlp(arr: *const i32, len: i32, nb_seed: u8) -> *mut MLP {
         model.deltas.push(layer_deltas);
     }
 
+    print_created_model(&model);
+
     let leaked = Box::leak(model);
     leaked
+}
+
+fn print_created_model(model : &MLP) {
+    // Layers & neurons per layer
+    println!("PMC : layers : {}", model.layers);
+    println!("PMC : n per layer len : {}", model.neurons_per_layer.len());
+    for i in 0..model.neurons_per_layer.len() {
+        println!("PMC : layer[{}] : {}", i, model.neurons_per_layer[i]);
+    }
+
+    // Weights
+    println!("PMC: Weights len : {}", model.weights.len());
+    for layer in 0..=model.layers {
+        for i in 0..model.weights[layer].len() {
+            for j in 0..model.weights[layer][i].len() {
+                println!("-- weights[{}][{}][{}]: {}", layer, i, j,  model.weights[layer][i][j]);
+            }
+        }
+    }
+
+    // Neurons res
+    println!("PMC: Neuron data len : {}", model.neuron_data.len());
+    for i in 0..model.neuron_data.len(){
+        for j in 0..model.neuron_data[i].len(){
+            println!("-- neuronData[{}][{}]: {}", i, j, model.neuron_data[i][j]);
+        }
+    }
+
+    // Deltas
+    println!("PMC: deltas len : {}", model.deltas.len());
+    for i in 0..model.deltas.len(){
+        for j in 0..model.deltas[i].len(){
+            println!("- deltas[{}][{}]: {}", i, j, model.deltas[i][j]);
+        }
+    }
 }
