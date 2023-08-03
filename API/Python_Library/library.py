@@ -1,5 +1,7 @@
+import os.path
 from typing import List
 import numpy as np
+import json
 from numba import jit
 
 
@@ -82,6 +84,37 @@ class MLP:
                 for i in range(0, self.neuron_per_layer[layer - 1] + 1):
                     for j in range(1, self.neuron_per_layer[layer] + 1):
                         self.weights[layer][i][j] -= learning_rate * self.neuron_data[layer - 1][i] * self.deltas[layer][j]
+
+    def save(self, filename: str):
+        data = {
+          "neuron_per_layer": self.neuron_per_layer,
+          "layers": self.layers,
+          "weights": self.weights,
+          "neuron_data": self.neuron_data,
+          "deltas": self.deltas
+        }
+        filename += ".json"
+        folder_path = "./Data/models"
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        path = os.path.join(folder_path, filename)
+
+        with open(path, 'w') as json_file:
+            json.dump(data, json_file)
+
+    def load(self, file_path):
+        if not os.path.exists(file_path):
+            raise Exception("Le fichier JSON n'existe pas : " + file_path)
+
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+
+            self.neuron_per_layer = data['neuron_per_layer']
+            self.layers = data['layers']
+            self.weights = data['weights']
+            self.neuron_data = data['neuron_data']
+            self.deltas = data['deltas']
 
     def print_mlp(self):
         print(f"PMC : layers : {self.layers}")
