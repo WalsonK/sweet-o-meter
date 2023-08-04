@@ -58,6 +58,8 @@ class MLP:
 
     def fit(self, all_inputs: List[List[float]], expected_outputs: List[List[float]],
             is_classification: bool, iteration: int, learning_rate: float):
+        data = {"loss": [], "accuracy": []}
+
         for _ in range(iteration):
             rand = np.random.randint(0, len(all_inputs))
             rand_inputs = all_inputs[rand]
@@ -85,6 +87,15 @@ class MLP:
                     for j in range(1, self.neuron_per_layer[layer] + 1):
                         self.weights[layer][i][j] -= learning_rate * self.neuron_data[layer - 1][i] * self.deltas[layer][j]
 
+            # Calc of loss
+            predicted = self.predict(rand_inputs, is_classification)
+            predicted_rounded = np.ceil(predicted)
+            data['loss'].append(mean_squared_error(rand_outputs, predicted))
+            # Calc of accuracy
+            data['accuracy'].append(accuracy(rand_outputs, predicted_rounded))
+
+        return data
+
     def save(self, filename: str):
         data = {
           "neuron_per_layer": self.neuron_per_layer,
@@ -93,6 +104,7 @@ class MLP:
           "neuron_data": self.neuron_data,
           "deltas": self.deltas
         }
+
         filename += ".json"
         folder_path = "./Data/models"
         if not os.path.exists(folder_path):
@@ -139,3 +151,25 @@ class MLP:
         for i in range(len(self.deltas)):
             for j in range(len(self.deltas[i])):
                 print(f"- deltas[{i}][{j}]: {self.deltas[i][j]}")
+
+
+@jit(nopython=True)
+def mean_squared_error(correct: List, predict: List):
+    correct = np.array(correct)
+    predict = np.array(predict)
+    return np.sum((correct - predict)**2) / len(correct)
+
+
+@jit(nopython=True)
+def cross_entropy_loss(correct, predict):
+    epsilon = 1e-15
+    return - np.sum(correct * np.log(predict + epsilon))
+
+
+@jit(nopython=True)
+def accuracy(correct: List, predict: List):
+    count = 0
+    for i in range(len(correct)):
+        if correct[i] == predict[i]:
+            count += 1
+    return count / len(correct)
