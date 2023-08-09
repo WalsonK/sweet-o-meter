@@ -52,13 +52,14 @@ class MLP:
 
                 self.neuron_data[layer][j] = total
 
-    def predict(self, inputs: List[float], is_classification: bool):
+    def predict(self, inputs: List[float], is_classification: bool) -> List[float]:
         self.propagate(inputs, is_classification)
         return self.neuron_data[self.layers][1:]
 
     def fit(self, all_inputs: List[List[float]], expected_outputs: List[List[float]],
             is_classification: bool, iteration: int, learning_rate: float):
         data = {"loss": [], "accuracy": []}
+        accuracy_data = {"correct_predict": 0, "data": []}
 
         for _ in range(iteration):
             rand = np.random.randint(0, len(all_inputs))
@@ -89,10 +90,9 @@ class MLP:
 
             # Calc of loss
             predicted = self.predict(rand_inputs, is_classification)
-            predicted_rounded = np.ceil(predicted)
-            data['loss'].append(mean_squared_error(rand_outputs, predicted))
+            data['loss'].append(mean_squared_error(np.array(rand_outputs), np.array(predicted)))
             # Calc of accuracy
-            data['accuracy'].append(accuracy(rand_outputs, predicted_rounded))
+            data["accuracy"].append(categorical_accuracy(predicted, rand_outputs, accuracy_data))
 
         return data
 
@@ -154,9 +154,7 @@ class MLP:
 
 
 @jit(nopython=True)
-def mean_squared_error(correct: List, predict: List):
-    correct = np.array(correct)
-    predict = np.array(predict)
+def mean_squared_error(correct: np.ndarray, predict: np.ndarray):
     return np.sum((correct - predict)**2) / len(correct)
 
 
@@ -166,10 +164,16 @@ def cross_entropy_loss(correct, predict):
     return - np.sum(correct * np.log(predict + epsilon))
 
 
-@jit(nopython=True)
-def accuracy(correct: List, predict: List):
-    count = 0
-    for i in range(len(correct)):
-        if correct[i] == predict[i]:
-            count += 1
-    return count / len(correct)
+def categorical_accuracy(predictions: List[float], corrects: List[float], accuracy_data: dict):
+    predicted_class = np.argmax(predictions)
+    true_class = np.argmax(corrects)
+
+    if predicted_class == true_class:
+        accuracy_data['correct_predict'] += 1
+
+    if len(accuracy_data['data']) == 0:
+        accuracy_data['data'].append(0)
+
+    accuracy = accuracy_data['correct_predict'] / len(accuracy_data['data'])
+    accuracy_data['data'].append(accuracy)
+    return accuracy
