@@ -28,14 +28,12 @@ def resizer(path, size=(50, 50)):
     resized.save(path)
 
 
-def image_to_matrix(file_path: str, is_grey: bool) -> ndarray:
+def image_to_matrix(file_path: str, is_grey: bool) -> list:
     image = Image.open(file_path)
     if is_grey:
         grey_image = image.convert("L")
         matrix = np.array(grey_image)
-        print("Image en noir est blanc")
     else:
         matrix = np.array(image)
-        print("Image en couleur")
 
-    return (matrix / 255.0).flatten()
+    return list((matrix / 255.0).flatten())
