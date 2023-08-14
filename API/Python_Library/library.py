@@ -57,14 +57,19 @@ class MLP:
         return self.neuron_data[self.layers][1:]
 
     def fit(self, all_inputs: List[List[float]], expected_outputs: List[List[float]],
-            is_classification: bool, iteration: int, learning_rate: float):
-        data = {"loss": [], "accuracy": []}
+            is_classification: bool, iteration: int, learning_rate: float,
+            validation: tuple[List[List[float]], List[List[float]]]):
+        data = {"loss": [], "accuracy": [], "validation_loss": [], "validation_accuracy": []}
         accuracy_data = {"correct_predict": 0, "data": []}
+        validation_accuracy_data = {"correct_predict": 0, "data": []}
 
         for _ in range(iteration):
             rand = np.random.randint(0, len(all_inputs))
             rand_inputs = all_inputs[rand]
             rand_outputs = expected_outputs[rand]
+
+            validation_rand_inputs = validation[0][rand]
+            validation_rand_outputs = validation[1][rand]
 
             self.propagate(rand_inputs, is_classification)
 
@@ -88,12 +93,18 @@ class MLP:
                     for j in range(1, self.neuron_per_layer[layer] + 1):
                         self.weights[layer][i][j] -= learning_rate * self.neuron_data[layer - 1][i] * self.deltas[layer][j]
 
-            # Calc of loss
+            # predictions
             predicted = self.predict(rand_inputs, is_classification)
-            data['loss'].append(mean_squared_error(np.array(rand_outputs), np.array(predicted)))
-            # Calc of accuracy
-            data["accuracy"].append(categorical_accuracy(predicted, rand_outputs, accuracy_data))
+            validation_predict = self.predict(validation_rand_inputs, is_classification)
 
+            # Calc of loss
+            data['loss'].append(mean_squared_error(np.array(rand_outputs), np.array(predicted)))
+            data['validation_loss'].append(mean_squared_error(np.array(validation_rand_outputs),
+                                                              np.array(validation_predict)))
+            # Calc of accuracy
+            data['accuracy'].append(categorical_accuracy(predicted, rand_outputs, accuracy_data))
+            data['validation_accuracy'].append(categorical_accuracy(validation_predict, validation_rand_outputs,
+                                                                    validation_accuracy_data))
         return data
 
     def save(self, filename: str):
