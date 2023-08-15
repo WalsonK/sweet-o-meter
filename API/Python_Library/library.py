@@ -57,8 +57,8 @@ class MLP:
         return self.neuron_data[self.layers][1:]
 
     def fit(self, all_inputs: List[List[float]], expected_outputs: List[List[float]],
-            is_classification: bool, iteration: int, learning_rate: float,
-            validation: tuple[List[List[float]], List[List[float]]]):
+            validation: tuple[List[List[float]], List[List[float]]],
+            is_classification: bool, iteration: int, learning_rate: float):
         data = {"loss": [], "accuracy": [], "validation_loss": [], "validation_accuracy": []}
         accuracy_data = {"correct_predict": 0, "data": []}
         validation_accuracy_data = {"correct_predict": 0, "data": []}
@@ -68,8 +68,9 @@ class MLP:
             rand_inputs = all_inputs[rand]
             rand_outputs = expected_outputs[rand]
 
-            validation_rand_inputs = validation[0][rand]
-            validation_rand_outputs = validation[1][rand]
+            validation_rand = np.random.randint(0, len(validation[0]))
+            validation_rand_inputs = validation[0][validation_rand]
+            validation_rand_outputs = validation[1][validation_rand]
 
             self.propagate(rand_inputs, is_classification)
 

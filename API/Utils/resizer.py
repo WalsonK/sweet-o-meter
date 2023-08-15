@@ -24,6 +24,6 @@ def resize_datasets(input_path, output_path, file_name, size=(50, 50)):
         print(f"Une erreur est survenue : {e}")
 
 
-for i in range(311, 7331):
+for i in range(1481, 1793):
     resize_datasets("/Users/walson/Documents/Cours/Rattrapage PA/sweetometer/sweet-o-meter/API/Data/Datasets/Originals/"
-                    "Apple_candy/shutterstock/", "../Data/Datasets/15x15/Apple_candy/", f"image_{i}.jpg", size=(15, 15))
+                    "Apple_candy/validation/", "../Data/Datasets/15x15/Apple_candy_validation/", f"image_{i}.jpg", size=(15, 15))
