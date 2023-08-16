@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { HistoriqueService } from '../shared/historique.service';
+import { Prediction } from '../shared/models/prediction';
 
 @Component({
   selector: 'app-tab1',
@@ -7,6 +9,18 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  historique: Prediction[] = []
+
+  constructor(historiqueService: HistoriqueService) {
+    this.historique = historiqueService.historique
+  }
+
+  goodPrediction(prediction: Prediction){
+    prediction.isGood = 1;
+  }
+
+  badPrediction(prediction: Prediction){
+    prediction.isGood = 2;
+  }
 
 }

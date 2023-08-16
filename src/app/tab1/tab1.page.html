@@ -1,11 +1,33 @@
 <app-header></app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list lines="none">
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-item *ngFor="let prediction of historique">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <ion-card-title>Prédiction n°{{ prediction.id }} :</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item >
+            <ion-thumbnail slot="start">
+              <img alt="Silhouette of mountains" [src]="prediction.image" />
+            </ion-thumbnail>
+
+            <ion-label><b>{{ prediction.title }}</b> à {{ prediction.estimation }}% </ion-label>
+
+            <div *ngIf="prediction.isGood == 0">
+              <ion-button slot="end" size="small" (click)="goodPrediction(prediction)" color="success">
+                <ion-icon slot="icon-only" name="thumbs-up-outline"></ion-icon>
+              </ion-button>
+              <ion-button slot="end" size="small" (click)="badPrediction(prediction)" color="danger">
+                <ion-icon slot="icon-only" name="thumbs-down-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
 </ion-content>
