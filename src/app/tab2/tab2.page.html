@@ -18,4 +18,27 @@
   </div>
   <ion-button (click)="openCamera()" expand="full" *ngIf="!cameraActive" style="margin-bottom:2%">Ouvrir la caméra</ion-button>
   <ion-button (click)="uploadPicture()" expand="full" *ngIf="!cameraActive">Importer une photo</ion-button>
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Prédiction : {{prediction.title}}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <img [src]="prediction.image" alt="Image" style="width: 100px; height: auto;">
+        <p>
+          Pour l'image envoyé, notre modèle de classification estime : <br>
+          <b>{{prediction.title}}</b> avec un taux de : <b>{{prediction.estimation}}%</b>
+          <br>Êtes-vous satisfait de cette prédiction ?
+        </p>
+        <ion-button size="small" color="success" (click)="goodPredict(prediction)">
+          <ion-icon slot="icon-only" name="thumbs-up-outline"></ion-icon>
+        </ion-button>
+        <ion-button  size="small" color="danger" (click)="badPredict(prediction)">
+          <ion-icon slot="icon-only" name="thumbs-down-outline"></ion-icon>
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

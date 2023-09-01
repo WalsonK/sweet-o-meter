@@ -35,16 +35,31 @@ async def predict(request: Request):
     path = recompose_png_to_jpg(base64)
     resizer(path, size=(size, size))
     array = image_to_matrix(path, True if color == "l" else False)
-    print(array)
 
     if ia == "rust":
         # Load Own model
-        ...
+        model = MLP([8, 3])
+        model.load(r"./Data/models/model1.json")
+
+        predictions = model.predict(array, True)
+        prediction = max(predictions)
+        prediction_index = predictions.index(prediction)
+        res = {"title": "", "estimation": prediction*100, "image": f"data:image/jpeg;base64,{base64}"}
+
+        # Churros
+        if prediction_index == 0:
+            res['title'] = "Churros"
+        # Apple Candy
+        if prediction_index == 1:
+            res['title'] = "Pomme d'amour"
+        # Cotton Candy
+        if prediction_index == 2:
+            res['title'] = "Barbe à Papa"
     else:
         # Load tensorflow model
         ...
 
-    return {"message": "predict Churros", "percent": 100, "data": "base64"}
+    return res
 
 
 @app.get("/hello/{name}")

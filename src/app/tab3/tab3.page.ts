@@ -16,7 +16,7 @@ export class Tab3Page {
   constructor(private toastCtrl: ToastController, private parametreService: ParametreService) {}
 
   isDisabled(pixel: number): boolean {
-    if (this.color === 'rgb' && (pixel == 50 || pixel == 25)) {
+    if (this.color === 'rgb' && pixel == 50 ) {
       return true;
     } else if (this.color === 'l' && pixel == 50) {
       return true;

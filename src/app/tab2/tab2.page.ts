@@ -6,6 +6,8 @@ import { EventsService } from '../shared/events.service'
 import { Camera, ImageOptions, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ApiService } from '../shared/api.service';
 import { ParametreService } from '../shared/parametre.service';
+import { Prediction } from '../shared/models/prediction';
+import { HistoriqueService } from '../shared/historique.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,8 +18,15 @@ export class Tab2Page implements OnInit, OnDestroy{
   tab2btnClickSub : any;
   image = null;
   cameraActive = false;
+  isModalOpen = false;
 
-  constructor(private eventsService: EventsService, private apiService: ApiService, private parametreService: ParametreService) {}
+  prediction: Prediction = new Prediction();
+
+  constructor(
+    private eventsService: EventsService,
+    private apiService: ApiService,
+    private parametreService: ParametreService,
+    private historiqueService: HistoriqueService) {}
 
   ngOnInit(): void {
     this.openCamera();
@@ -56,7 +65,8 @@ export class Tab2Page implements OnInit, OnDestroy{
       size : this.parametreService.size
     }
     this.apiService.sendImage(data).subscribe(result => {
-      console.log("API : ", result)
+      this.prediction = result;
+      this.setOpenModal();
     })
     this.stopCamera();
   }
@@ -73,8 +83,19 @@ export class Tab2Page implements OnInit, OnDestroy{
     try {
       const img = await Camera.getPhoto(imageOptions);
       const base64Image = img.base64String;
-      console.log(base64Image)
       if(this.cameraActive) this.stopCamera();
+
+      const data = {
+        base64 : base64Image,
+        ia : this.parametreService.ia,
+        color : this.parametreService.color,
+        size : this.parametreService.size
+      }
+
+      this.apiService.sendImage(data).subscribe(result => {
+        this.prediction = result;
+        this.setOpenModal();
+      })
     }
     catch(e){
       console.log('Erreur :', e);
@@ -83,5 +104,27 @@ export class Tab2Page implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.tab2btnClickSub.unsubsribe();
+  }
+
+  setOpenModal(){
+    if(this.isModalOpen == false){
+      this.isModalOpen = true;
+    }else{
+      this.isModalOpen = false;
+    }
+  }
+
+  goodPredict(pred: Prediction){
+    pred.isGood = 1;
+    pred.id = this.historiqueService.historique.length
+    this.setOpenModal();
+    this.historiqueService.historique.push(pred)
+  }
+
+  badPredict(pred : Prediction){
+    pred.isGood = 2;
+    pred.id = this.historiqueService.historique.length
+    this.setOpenModal();
+    this.historiqueService.historique.push(pred)
   }
 }

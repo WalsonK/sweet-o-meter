@@ -25,6 +25,16 @@
                 <ion-icon slot="icon-only" name="thumbs-down-outline"></ion-icon>
               </ion-button>
             </div>
+            <div *ngIf="prediction.isGood == 1">
+              <ion-button slot="end" size="small" color="success" [disabled]="true">
+                <ion-icon slot="icon-only" name="thumbs-up-outline"></ion-icon>
+              </ion-button>
+            </div>
+            <div *ngIf="prediction.isGood == 2">
+              <ion-button slot="end" size="small" color="danger" [disabled]="true">
+                <ion-icon slot="icon-only" name="thumbs-down-outline"></ion-icon>
+              </ion-button>
+            </div>
           </ion-item>
         </ion-card-content>
       </ion-card>
