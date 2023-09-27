@@ -11,14 +11,14 @@ export class Tab3Page {
 
   color: string = "l";
   ia : string = "rust"
-  size: string = "15";
+  size: string = "";
 
   constructor(private toastCtrl: ToastController, private parametreService: ParametreService) {}
 
   isDisabled(pixel: number): boolean {
-    if (this.color === 'rgb' && pixel == 50 ) {
+    if ((this.color === 'rgb' || this.color === 'l') && pixel == 15 ) {
       return true;
-    } else if (this.color === 'l' && pixel == 50) {
+    } else if (this.color === 'l' && pixel == 25) {
       return true;
     }
     return false;

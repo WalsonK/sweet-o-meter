@@ -26,7 +26,7 @@
               <ion-select placeholder="Taille en pixel" [(ngModel)]="size">
                 <ion-select-option value="50" [disabled]="isDisabled(50)">50x50</ion-select-option>
                 <ion-select-option value="25" [disabled]="isDisabled(25)">25x25</ion-select-option>
-                <ion-select-option value="15">15x15</ion-select-option>
+                <ion-select-option value="15" [disabled]="isDisabled(15)">15x15</ion-select-option>
               </ion-select>
             </ion-item>
 

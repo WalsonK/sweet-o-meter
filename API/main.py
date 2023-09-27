@@ -39,12 +39,13 @@ async def predict(request: Request):
     if ia == "rust":
         # Load Own model
         model = MLP([8, 3])
-        model.load(r"./Data/models/model1.json")
+        model_name = f"model_{color}_s{size}_lr.json"
+        model.load(r"./Data/models/" + model_name)
 
         predictions = model.predict(array, True)
         prediction = max(predictions)
         prediction_index = predictions.index(prediction)
-        res = {"title": "", "estimation": prediction*100, "image": f"data:image/jpeg;base64,{base64}"}
+        res = {"title": "", "estimation": round(prediction*100, 2), "image": f"data:image/jpeg;base64,{base64}"}
 
         # Churros
         if prediction_index == 0:
